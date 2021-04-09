@@ -105,6 +105,7 @@ def word_wrapper(sentence, M):
     
     #showing result
     #printing paragraph width with stars
+    print('\n')
     print('*' * M)
     #calling "seq_printer" to show the result
     seq_printer(word_list, break_points)
@@ -112,9 +113,14 @@ def word_wrapper(sentence, M):
     print('*' * M)
     
 
-#performing on a sequence with dynamic programming method
+#performing on a sequence
+#parameters
+#sentence: a long sentence
+sentence = 'A sequence of words is given there is a limit on the number of characters for each line By putting line breaks in such a way that lines are printed clearly The lines must be balanced when some lines have lots of extra spaces and some lines are containing a small number of extra spaces it will balance them to separate lines It tries to use the same number of extra spaces to make them balanced'
+#M: paragraph width
+M = [25, 35, 55, 75]
 
-
-
-
-#showing result
+#testing
+#different condition
+for m in M:
+    word_wrapper(sentence, m)
