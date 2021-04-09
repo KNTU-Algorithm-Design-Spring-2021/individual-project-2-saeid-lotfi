@@ -41,7 +41,7 @@ def seq_printer(word_list, break_points):
         #first element is blank string to reserve zero index and start from one
     #break_points: a list containing break points of sentence
     #output
-    #just print the sentence in a good shape
+    #printing the words based on break points
     
     #helpful variables
     start_index = len(break_points)
@@ -61,6 +61,56 @@ def seq_printer(word_list, break_points):
     for i in range(len(lines)-1, -1, -1):
         print(lines[i])
 
+
+#this function print the given sentence to a well shaped paragraph
+def word_wrapper(sentence, M):
+    #iputs
+    #sentence: a string of characters
+    #M: maximum width of paragraph
+    #output
+    #print the sentence in a good shape
+    
+    #word extraction
+    #list of individual words
+        #first element is blank to start from index one
+    word_list = [''] + sentence.split(' ')
+    #list of words length
+        #first element is zero to start from index one
+    word_lentgh_list = np.array([len(word) for word in word_list])
+    #number of all words
+    n = len(word_lentgh_list) - 1
+    
+    #making cost matrix
+        #first column and row are extra to start from index [1, 1]
+    line_cost_matrix = np.ones([1 + n, 1 + n])
+    for i in range(1, n + 1):
+        for j in range(i, n + 1):
+            #getting cost of putting i'th word to j'th word in one line
+            line_cost_matrix[i, j] = line_cost_cal(word_lentgh_list, i, j, M)
+    
+    #making total cost array with dynamic prgramming
+    #first element is zero
+    C = [0]
+    #keeping break points for print phase
+    break_points = [0]
+    #getting C[i] from C[i-1]
+    for i in range(1, n + 1):
+        #possible ways of breaking the words for last line with use of up-to i'th word
+        candid_list = [(C[mid_index - 1] + line_cost_matrix[mid_index, i]) for mid_index in range(1, i + 1)]
+        #selecting minimum for best solution up-to i'th word
+        C.append(min(candid_list))
+        #keeping the solution index as break index
+        break_points.append(candid_list.index(min(candid_list)) + 1)
+        
+    
+    #showing result
+    #printing paragraph width with stars
+    print('*' * M)
+    #calling "seq_printer" to show the result
+    seq_printer(word_list, break_points)
+    #printing paragraph width with stars
+    print('*' * M)
+    
 
 #performing on a sequence with dynamic programming method
 
